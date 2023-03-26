@@ -14,13 +14,17 @@
 </template>
 
 <script lang="ts">
-  import store from '@/store/index2';
 import Vue from 'vue';
   import {Component, Prop} from 'vue-property-decorator';
 
-  @Component
+  @Component({
+    computed: {
+      tagList() {
+        // return this.$store.fetchTags()
+      }
+    }
+  })
   export default class Tags extends Vue {
-    tagList = store.fetchTags()
     selectedTags: string[] = [];
 
     toggle(tag: string) {
