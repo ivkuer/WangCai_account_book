@@ -1,9 +1,14 @@
 type RecordItem = {
-  tags: string[]
+  tags: Tag[]
   notes: string
   type: string
   amount: number // 数据类型 object | string
-  createdAt?: Date  // 类 / 构造函数
+  createdAt?: string  // 类 / 构造函数
+}
+type RootState ={
+  recordList: RecordItem[],
+  tagList: Tag[],
+  currentTag?: Tag
 }
 
 type Tag = {
@@ -20,16 +25,4 @@ type TagListModel = {
   save: () => void
 }
 
-interface Window {
-  store: {
-    tagList: Tag[]
-    findTag: (id: string) => Tag | undefined
-    createTag: (name: string) => void
-    removeTag: (id: string) => boolean
-    updateTag: TagListModel['update']
-  
-    recordList: RecordItem[]
-    createRecord: (record: RecordItem) => void
-  }
-  
-}
+
