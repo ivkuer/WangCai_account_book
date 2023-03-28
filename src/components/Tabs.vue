@@ -31,7 +31,7 @@ export default class Tabs extends Vue {
 
 <style lang="scss" scoped>
 .tabs {
-  background: #eee;
+  background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
   display: flex;
   text-align: center;
   font-size: 24px;
@@ -43,11 +43,10 @@ export default class Tabs extends Vue {
     justify-content: center;
     align-items: center;
     position: relative;
-    transition: all 0.8s;
+    transition: all 0.9s;
     &.selected {
-      border: 1px solid #000;
       border-radius: 16px;
-      background-color: #fff;
+      background-color: #fff4f4;
     }
   }
 }

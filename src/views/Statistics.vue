@@ -203,7 +203,8 @@ export default class Statistics extends Vue {
 
 ::v-deep {
   .type-tabs-item {
-    background: #c4c4c4;
+    background: transparent;
+    
 
 
     &.selected {
@@ -217,6 +218,7 @@ export default class Statistics extends Vue {
 
   .interval-tabs-item {
     height: 48px;
+    
   }
 }
 
@@ -226,6 +228,7 @@ export default class Statistics extends Vue {
   display: flex;
   justify-content: space-between;
   align-content: center;
+  
 }
 
 .title {
@@ -233,7 +236,7 @@ export default class Statistics extends Vue {
 }
 
 .record {
-  background: white;
+  background: #e3eeff ;
   @extend %item;
 }
 

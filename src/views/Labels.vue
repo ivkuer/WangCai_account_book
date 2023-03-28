@@ -47,15 +47,18 @@ import TagHelper from '@/mixin/TagHelper'
 
 <style lang="scss" scoped>
   .tags {
-    background: white;
+    background: transparent;
     font-size: 16px;
-    padding-left: 16px;
     > .tag {
       min-height: 44px;
       display: flex;
+    margin: 8px;
+    padding: 10px;
+    background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+    border-radius: 8px;
+box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.4);
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #e6e6e6;
       svg {
         width: 18px;
         height: 18px;
