@@ -4,10 +4,9 @@
     <ol v-if="groupList.length > 0">
       <li v-for="group, index in groupList" :key="index">
         <h3 class="title">{{ beautify(group.title) }}
-          <span>￥{{ group.total }}</span>
         </h3>
         <ol>
-          <li v-for="item,index in group.items" :key="index" class="record">
+          <li v-for="item, index in group.items" :key="index" class="record">
             <span>{{ tagString(item.tags) }}</span>
             <span class="notes">{{ item.notes }}</span>
             <span>￥{{ item.amount }} </span>
@@ -18,6 +17,7 @@
     <div v-else class="noResult">
       目前没有相关记录
     </div>
+    <div id="chart"></div>
   </Layout>
 </template>
 
@@ -28,6 +28,7 @@ import Tabs from "@/components/Tabs.vue";
 import recordTypeList from "@/constants/recordTypeList";
 import dayjs from "dayjs";
 import clone from "@/lib/clone";
+import * as echarts from 'echarts';
 @Component({
   components: { Tabs },
 })
@@ -55,6 +56,7 @@ export default class Statistics extends Vue {
   get recordList() {
     return (this.$store.state as RootState).recordList;
   }
+  data: {value?: number, name: string}[] = []
   get groupList() {
     const { recordList } = this;
     if (recordList.length === 0) {
@@ -67,7 +69,7 @@ export default class Statistics extends Vue {
     if (newList.length === 0) {
       return [] as Result;
     }
-    type Result = {title: string, total?: number, items: RecordItem[]}[]
+    type Result = { title: string, total?: number, items: RecordItem[] }[]
     const result: Result = [
       {
         title: dayjs(newList[0].createdAt).format("YYYY-MM-DD"),
@@ -87,28 +89,118 @@ export default class Statistics extends Vue {
       }
     }
     result.forEach(group => {
-      group.total = group.items.reduce((sum, item) => 
+      group.total = group.items.reduce((sum, item) =>
         sum + item.amount
-      ,0)
+        , 0)
+    })
+    this.data = []
+    result.forEach(item => {
+      this.data.push({value: item.total, name: this.beautify(item.title)})
     })
     return result;
   }
   beforeCreate() {
     this.$store.commit("fetchRecords");
   }
-
-  // dayjs
-
   type = "-";
   recordTypeList = recordTypeList;
+
+  created() {
+    let chartDom = document.getElementById('chart') as HTMLDivElement;
+  }
+  
+  mounted() {
+    let chartDom = document.getElementById('chart') as HTMLDivElement;
+    let myChart = echarts.init(chartDom);
+    let option;
+
+    option = {
+      tooltip: {
+    trigger: 'item'
+  },
+      series: [
+        {
+          type: 'pie',
+          radius: '90%',
+          top: 0,
+          left: 0,
+          buttom: 0,
+          right: 0,
+          label: {
+           show: false,
+           position: 'center'
+        },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: 40,
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+          data: this.data,
+        }
+      ]
+    };
+
+    option && myChart.setOption(option);
+  }
+
+  updated() {
+    let chartDom = document.getElementById('chart') as HTMLDivElement;
+    let myChart = echarts.init(chartDom);
+    let option;
+
+    option = {
+      tooltip: {
+    trigger: 'item'
+  },
+      series: [
+        {
+          type: 'pie',
+          radius: '90%',
+          top: 0,
+          left: 0,
+          buttom: 0,
+          right: 0,
+          label: {
+           show: false,
+           position: 'center'
+        },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: 40,
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+          data: this.data,
+        }
+      ]
+    };
+
+    option && myChart.setOption(option);
+  }
+
 }
 </script>
 
 <style scoped lang="scss">
+#chart {
+  height: 200px;
+  width: 100%;
+}
+
 .noResult {
   padding: 16px;
   text-align: center;
 }
+
 ::v-deep {
   .type-tabs-item {
     background: #c4c4c4;
@@ -135,16 +227,18 @@ export default class Statistics extends Vue {
   justify-content: space-between;
   align-content: center;
 }
+
 .title {
   @extend %item;
 }
+
 .record {
   background: white;
   @extend %item;
 }
+
 .notes {
   margin-right: auto;
   margin-left: 16px;
   color: #999;
-}
-</style>
+}</style>

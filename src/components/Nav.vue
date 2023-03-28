@@ -16,9 +16,8 @@
 </template>
 
 <script lang="ts">
-
-  export default {
-    name: 'Nav'
+  export default  {
+    name: 'Nav',
   };
 </script>
 
